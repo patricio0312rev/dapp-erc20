@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import logo from '../logo.png';
 import './App.css';
+import Web3 from 'web3';
+import web3 from '../ethereum/web3';
+import contratoToken from '../abis/main.json';
 
 class App extends Component {
   render() {
@@ -13,8 +16,10 @@ class App extends Component {
             target="_blank"
             rel="noopener noreferrer"
           >
-            DApp
+            DApp de Patricio
           </a>
+
+
         </nav>
         <div className="container-fluid mt-5">
           <div className="row">
