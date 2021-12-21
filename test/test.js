@@ -32,7 +32,7 @@ contract('Main', accounts => {
         balance_contrato = await instance.balanceTotal.call();
 
         console.log('Balance de accounts[0]: ', balance_direccion);
-        console.log('Balance Total del Smart Contract ', balance_contrato);
+        console.log('Balance Total del Smart Contract: ', balance_contrato);
 
         // Verificaciones
         assert.equal(balance_direccion, 10);
