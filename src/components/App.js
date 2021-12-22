@@ -72,6 +72,18 @@ class App extends Component {
     }
   }
 
+  // Función para realizar la compra de tokens
+  envio = async(address, quantity) => {
+    try {
+      const accounts = await web3.eth.getAccounts();
+      await this.state.contract.methods.sendTokens(address, quantity).send({from: accounts[0]});
+    } catch(err) {
+      this.setState({errorMessage: err.message})
+    } finally {
+      this.setState({loading: false});
+    }
+  }
+
   render() {
     return (
       <div>
@@ -91,25 +103,35 @@ class App extends Component {
           <div className="row">
             <main role="main" className="col-lg-12 d-flex text-center">
               <div className="content mr-auto ml-auto">
-                <a
-                  href="https://frogames.es/rutas-de-aprendizaje"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <img src={logo} className="App-logo" alt="logo" />
-                </a>
-                <h1>DApp</h1>
-                <p>
-                  Edita <code>src/components/App.js</code> y guarda para recargar.
-                </p>
-                <a
-                  className="App-link"
-                  href="https://frogames.es/rutas-de-aprendizaje"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                   APRENDE BLOCKCHAIN <u><b>AHORA! </b></u>
-                </a>
+                <h1>Comprar tokens ERC-20</h1>
+
+                <form onSubmit={(event) => {
+                  event.preventDefault();
+                  const address = this.address.value;
+                  const quantity = this.quantity.value;
+                  this.envio(address, quantity);
+                }}>
+                  
+                  <input 
+                    type="text" 
+                    className='form-control mb-1' 
+                    placeholder='Dirección de destino'
+                    ref={(input) => {this.address = input}}/>
+                  
+                  <input 
+                    type="text" 
+                    className='form-control mb-1' 
+                    placeholder='Cantidad de tokens a comprar'
+                    ref={(input) => {this.quantity = input}}/>
+                  
+                  <input 
+                    type="submit" 
+                    className='btn btn-block btn-danger btn-sm' 
+                    value='Comprar tokens'/>
+
+                </form>
+                
+
               </div>
             </main>
           </div>
