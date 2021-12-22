@@ -68,6 +68,7 @@ class App extends Component {
       loading: false,
       errorMessage: '',
       addressBalance: '',
+      numTokens: 0,
     }
   }
 
@@ -107,6 +108,20 @@ class App extends Component {
       // Balance del smart contract
       const balance = await this.state.contract.methods.balanceTotal().call();
       alert(parseFloat(balance));
+    } catch(err) {
+      this.setState({errorMessage: err.message})
+    } finally {
+      this.setState({loading: false});
+    }
+  }
+
+  // Funcion para incrementar el número de tokens del Smart Contract
+  incremento_tokens = async(quantity, message) => {
+    try {
+      console.log(message);
+      const accounts = await web3.eth.getAccounts();
+      // Incrementar el balance de tokens del Smart Contract
+      await this.state.contract.methods.generateTokens(quantity).send({from: accounts[0]});
     } catch(err) {
       this.setState({errorMessage: err.message})
     } finally {
@@ -202,6 +217,29 @@ class App extends Component {
                     type="submit" 
                     className='btn btn-block btn-primary btn-sm' 
                     value='Obtener balance total'/>
+
+                </form>
+
+                &nbsp;
+
+                <h1>Añadir nuevos tokens</h1>
+                <form onSubmit={(event) => {
+                  event.preventDefault();
+                  const message = 'Incremento de tokens del Smart Contract en ejecución...';
+                  const quantity = this.quantity.value; 
+                  this.incremento_tokens(quantity, message);
+                }}>
+                  
+                  <input 
+                    type="text" 
+                    className='form-control mb-1' 
+                    placeholder='Cantidad de tokens a incrementar'
+                    ref={(input) => {this.quantity = input}}/>
+
+                  <input 
+                    type="submit" 
+                    className='btn btn-block btn-warning btn-sm' 
+                    value='Incrementar tokens'/>
 
                 </form>
 
