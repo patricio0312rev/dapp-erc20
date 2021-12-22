@@ -2,7 +2,7 @@ require('babel-register');
 require('babel-polyfill');
 
 var HDWalletProvider = require('truffle-hdwallet-provider');
-var mnemonic = "...";
+var mnemonic = "..."; // Actualizar a clave secreta de Wallet
 
 module.exports = {
   networks: {
@@ -19,6 +19,13 @@ module.exports = {
       gas: 4500000,
       gasPrice: 10000000000,
     },
+    bscTestNet: {
+      provider: () => new HDWalletProvider(mnemonic, `https://data-seed-prebsc-1-s1.binance.org:8545`),
+      network_id: 97,
+      confirmations: 10,
+      timeoutBlocks: 200,
+      skipDryRun: true
+    }
   },
   contracts_directory: './src/contracts/',
   contracts_build_directory: './src/abis/',

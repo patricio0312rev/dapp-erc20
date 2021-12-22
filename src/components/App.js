@@ -32,7 +32,7 @@ class App extends Component {
     this.setState({account: accounts[0]});
     console.log('account: ', this.state.account);
     
-    const networkId = '4'; // Rinkeby: 4 | Ganache: 5777
+    const networkId = '97'; // Rinkeby: 4 | Ganache: 5777 | BSCTestNet: 97
     console.log('networkId: ', networkId);
     const networkData = contratoToken.networks[networkId];
     console.log('networkData:', networkData);
