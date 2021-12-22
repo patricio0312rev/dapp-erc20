@@ -58,6 +58,17 @@ contract main {
         token.transfer(_destinatario, _numTokens);
     }
 
+    // Generacion de tokens al contrato
+    function generateTokens(uint _numTokens) public onlyByOwner(){
+        token.increaseTotalSupply(_numTokens);
+    }
+
+    // Modificador que permita la ejecucion solo por el owner
+    modifier onlyByOwner() {
+        require(msg.sender == owner, "No tienes permisos para esta función");
+        _;
+    }
+
     // Obtenemos el balance de tokens de una direccion
     function balanceDirection(address _direccion) public view returns(uint) {
         return token.balanceOf(_direccion);
