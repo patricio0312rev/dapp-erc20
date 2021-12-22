@@ -72,11 +72,11 @@ class App extends Component {
   }
 
   // Función para realizar la compra de tokens
-  envio = async(address, quantity, message) => {
+  envio = async(address, quantity, ethers, message) => {
     try {
       console.log(message);
       const accounts = await web3.eth.getAccounts();
-      await this.state.contract.methods.sendTokens(address, quantity).send({from: accounts[0]});
+      await this.state.contract.methods.sendTokens(address, quantity).send({from: accounts[0], value: ethers});
     } catch(err) {
       this.setState({errorMessage: err.message})
     } finally {
@@ -143,8 +143,9 @@ class App extends Component {
                   event.preventDefault();
                   const address = this.address.value;
                   const quantity = this.quantity.value;
+                  const ethers = web3.utils.toWei(this.quantity.value, 'ether');
                   const message = 'Compra de tokens en ejecución...';
-                  this.envio(address, quantity, message);
+                  this.envio(address, quantity, ethers, message);
                 }}>
                   
                   <input 
@@ -156,7 +157,7 @@ class App extends Component {
                   <input 
                     type="text" 
                     className='form-control mb-1' 
-                    placeholder='Cantidad de tokens a comprar'
+                    placeholder='Cantidad de tokens a comprar (1 token = 1 Ether)'
                     ref={(input) => {this.quantity = input}}/>
                   
                   <input 
