@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from '../logo.png';
 import './App.css';
 import Web3 from 'web3';
 import web3 from '../ethereum/web3';
@@ -48,9 +47,9 @@ class App extends Component {
       console.log(contract)
 
       // Direccion del Smart Contract
-      const smartContractAddress = await this.state.contract.methods.getContract().call();
-      this.setState({smartContractAddress})
-      console.log('Smart Contract Address: ', smartContractAddress);
+      const smartContract = await this.state.contract.methods.getContract().call();
+      this.setState({smartContractAdress: smartContract})
+      console.log('Smart Contract Address: ', smartContract);
     } else {
       window.alert('¡El Smart Contract no se ha desplegado en la red!');
     }
@@ -97,8 +96,13 @@ class App extends Component {
             DApp de Patricio
           </a>
 
-
+          <ul className='navbar-nav px-3'>
+            <li className='nav-item text-nowrap d-none d-sm-none d-sm-block'>
+              <small className='text-white'><span id="account">{this.state.smartContractAdress}</span></small>
+            </li>
+          </ul>
         </nav>
+
         <div className="container-fluid mt-5">
           <div className="row">
             <main role="main" className="col-lg-12 d-flex text-center">
