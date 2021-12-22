@@ -90,9 +90,23 @@ class App extends Component {
       console.log(message);
       // Balance de la persona
       const balance_direccion = await this.state.contract.methods.balanceDirection(balanceAddress).call();
-      alert(balance_direccion);
+      alert(parseFloat(balance_direccion));
       this.setState({addressBalance: balance_direccion});
       
+    } catch(err) {
+      this.setState({errorMessage: err.message})
+    } finally {
+      this.setState({loading: false});
+    }
+  }
+
+  // Funcion para visualizar el balance de tokens del Smart Contract
+  balance_contrato = async(message) => {
+    try {
+      console.log(message);
+      // Balance del smart contract
+      const balance = await this.state.contract.methods.balanceTotal().call();
+      alert(parseFloat(balance));
     } catch(err) {
       this.setState({errorMessage: err.message})
     } finally {
@@ -176,6 +190,21 @@ class App extends Component {
                 </form>
 
                 &nbsp;
+
+                <h1>Balance de tokens del Smart Contract</h1>
+                <form onSubmit={(event) => {
+                  event.preventDefault();
+                  const message = 'Balance de tokens del Smart Contract en ejecución...';
+                  this.balance_contrato(message);
+                }}>
+                  <input 
+                    type="submit" 
+                    className='btn btn-block btn-primary btn-sm' 
+                    value='Obtener balance total'/>
+
+                </form>
+
+
                 
 
               </div>
