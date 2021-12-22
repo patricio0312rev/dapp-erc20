@@ -31,6 +31,7 @@ contract main {
 
     // Compramos tokens mediante: direccion de destino y cantidad de tokens
     function sendTokens(address _destinatario, uint _numTokens) public {
+        require(_numTokens <= 10, "La cantidad de tokens es demasiado alta.");
         token.transfer(_destinatario, _numTokens);
     }
 
