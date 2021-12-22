@@ -72,10 +72,27 @@ class App extends Component {
   }
 
   // Función para realizar la compra de tokens
-  envio = async(address, quantity) => {
+  envio = async(address, quantity, message) => {
     try {
+      console.log(message);
       const accounts = await web3.eth.getAccounts();
       await this.state.contract.methods.sendTokens(address, quantity).send({from: accounts[0]});
+    } catch(err) {
+      this.setState({errorMessage: err.message})
+    } finally {
+      this.setState({loading: false});
+    }
+  }
+
+  // Funcion para visualizar el balance de tokens de un usuario
+  balance_persona = async(balanceAddress, message) => {
+    try {
+      console.log(message);
+      // Balance de la persona
+      const balance_direccion = await this.state.contract.methods.balanceDirection(balanceAddress).call();
+      alert(balance_direccion);
+      this.setState({addressBalance: balance_direccion});
+      
     } catch(err) {
       this.setState({errorMessage: err.message})
     } finally {
@@ -108,12 +125,12 @@ class App extends Component {
             <main role="main" className="col-lg-12 d-flex text-center">
               <div className="content mr-auto ml-auto">
                 <h1>Comprar tokens ERC-20</h1>
-
                 <form onSubmit={(event) => {
                   event.preventDefault();
                   const address = this.address.value;
                   const quantity = this.quantity.value;
-                  this.envio(address, quantity);
+                  const message = 'Compra de tokens en ejecución...';
+                  this.envio(address, quantity, message);
                 }}>
                   
                   <input 
@@ -134,6 +151,31 @@ class App extends Component {
                     value='Comprar tokens'/>
 
                 </form>
+
+                &nbsp;
+
+                <h1>Balance total de tokens de un usuario</h1>
+                <form onSubmit={(event) => {
+                  event.preventDefault();
+                  const balanceAddress = this.balanceAddress.value;
+                  const message = 'Balance de tokens de un usuario en ejecución...';
+                  this.balance_persona(balanceAddress, message);
+                }}>
+                  
+                  <input 
+                    type="text" 
+                    className='form-control mb-1' 
+                    placeholder='Dirección de usuario'
+                    ref={(input) => {this.balanceAddress = input}}/>
+                  
+                  <input 
+                    type="submit" 
+                    className='btn btn-block btn-success btn-sm' 
+                    value='Obtener balance'/>
+
+                </form>
+
+                &nbsp;
                 
 
               </div>
