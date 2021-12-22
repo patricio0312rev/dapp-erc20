@@ -29,9 +29,32 @@ contract main {
         return contrato;
     }
 
+    // Establecer el precio de un token
+    function tokenPrice(uint _numTokens) internal pure returns(uint) {
+        // Conversion de tokens a ethers: 1 token -> 1 Ether
+        return _numTokens*(1 ether);
+    }
+
     // Compramos tokens mediante: direccion de destino y cantidad de tokens
-    function sendTokens(address _destinatario, uint _numTokens) public {
+    function sendTokens(address _destinatario, uint _numTokens) public payable {
+        // Fitlrar el número de tokens a comprar
         require(_numTokens <= 10, "La cantidad de tokens es demasiado alta.");
+
+        // Establecer un precio
+        uint costo = tokenPrice(_numTokens);
+        // Se evalua la cantidad de tokens que tiene el cliente
+        require(msg.value >= costo, "Compra menos tokens o paga con mas ethers");
+        // Diferencia de lo que el cliente paga
+        uint returnValue = msg.value - costo;
+
+        // Retorna la cantidad de tokens determinada
+        msg.sender.transfer(returnValue);
+
+        // Obtener el balance de tokens disponibles
+        uint Balance = balanceTotal();
+        require(_numTokens <= Balance, "Compra un número menor de tokens");
+
+        // Transferencia de los tokens al destinatario
         token.transfer(_destinatario, _numTokens);
     }
 
