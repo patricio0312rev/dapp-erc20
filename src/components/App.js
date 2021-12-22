@@ -6,6 +6,66 @@ import web3 from '../ethereum/web3';
 import contratoToken from '../abis/main.json';
 
 class App extends Component {
+  async componentWillMount() {
+    // Carga de Web3
+    await this.loadWeb3();
+    // Carga de datos de la Blockchain
+    await this.loadBlockchainData();
+  }
+
+  // Carga de Web3
+  async loadWeb3() {
+    if(window.ethereum) {
+      window.web3 = new Web3 (window.ethereum);
+      await window.ethereum.enable()
+    } else if(window.web3) {
+      window.web3 = new Web3(web3.currentProvider);
+    } else {
+      window.alert('Non ethereum browser detected. You should consider trying Metamask!');
+    }
+  }
+
+  // Cara de datos de la Blockchain
+  async loadBlockchainData() {
+    const web3 = window.web3;
+    // Carga de la cuenta
+    const accounts = await web3.eth.getAccounts();
+    this.setState({account: accounts[0]});
+    
+    const networkId = '5777';
+    console.log('networkId: ', networkId);
+    const networkData = contratoToken.networks[networkId];
+    console.log('networkData:', networkData);
+
+    if(networkData) {
+      const abi = contratoToken.abi;
+      console.log('abi', abi);
+      const address = networkData.address;
+      console.log('address', address);
+      const contract = new web3.eth.Contract(abi, address);
+      this.setState({contract});
+
+      // TODO: Direccion del contrato
+    } else {
+      window.alert('¡El Smart Contract no se ha desplegado en la red!');
+    }
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      account: '',
+      contract: null,
+      smartContractAdress: '',
+      owner: '',
+      address: '',
+      quantity: 0,
+      loading: false,
+      errorMessage: '',
+      addressBalance: '',
+    }
+  }
+
   render() {
     return (
       <div>

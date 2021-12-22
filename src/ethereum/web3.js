@@ -11,9 +11,9 @@ window.addEventListener("load", async() => {
         window.web3 = new Web3(window.ethereum);
 
         try {
-            await window.etehereum.enable();
+            await window.ethereum.enable();
         } catch(error) {
-            alert('User denied account access...');
+            alert('User denied account access...' + error);
         }
     } else if(window.web3){
         window.web3 = new Web3(web3.currentProvider);
