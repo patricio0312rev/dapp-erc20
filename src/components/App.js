@@ -19,7 +19,7 @@ class App extends Component {
       window.web3 = new Web3 (window.ethereum);
       await window.ethereum.enable()
     } else if(window.web3) {
-      window.web3 = new Web3(web3.currentProvider);
+      window.web3 = new Web3 (window.web3.currentProvider);
     } else {
       window.alert('Non ethereum browser detected. You should consider trying Metamask!');
     }
@@ -31,6 +31,7 @@ class App extends Component {
     // Carga de la cuenta
     const accounts = await web3.eth.getAccounts();
     this.setState({account: accounts[0]});
+    console.log('account: ', this.state.account);
     
     const networkId = '5777';
     console.log('networkId: ', networkId);
@@ -44,13 +45,18 @@ class App extends Component {
       console.log('address', address);
       const contract = new web3.eth.Contract(abi, address);
       this.setState({contract});
+      console.log(contract)
 
-      // TODO: Direccion del contrato
+      // Direccion del Smart Contract
+      const smartContractAddress = await this.state.contract.methods.getContract().call();
+      this.setState({smartContractAddress})
+      console.log('Smart Contract Address: ', smartContractAddress);
     } else {
       window.alert('¡El Smart Contract no se ha desplegado en la red!');
     }
   }
 
+  // Constructor
   constructor(props) {
     super(props);
     this.state = {
